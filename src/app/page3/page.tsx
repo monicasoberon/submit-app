@@ -1,44 +1,30 @@
-// app/signup/page.tsx
 'use client';
-import { useState, useContext, useEffect } from 'react';
-import { UserContext, UserProvider } from '../context/UserContext';
-import Navbar from '../components/Navbar';
+import { useState, useEffect } from 'react';
+import { UserProvider, useUser } from '../context/UserContext';
 
-export default function SignUpPage() {
-  return (
-    <UserProvider>
-      <SignUp />
-    </UserProvider>
-  );
-}
 
-function SignUp() {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('SignUp debe estar dentro de un UserProvider');
-  }
-  const { setUser } = context;
-
+export default function SignUp() {
+  const { setUser } = useUser();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
 
-  const validatePassword = (password) => {
+  const validatePassword = (password: string) => {
     const re = /^(?=.*[A-Z])(?=.*[!@#$&*]).{8,}$/;
     return re.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validaciones
@@ -59,7 +45,10 @@ function SignUp() {
     }
 
     // Si todo está bien, guarda el usuario en el contexto
-    setUser(formData);
+    setUser({
+      name: formData.name, email: formData.email,
+      password: formData.password
+    });
     console.log('Usuario registrado:', formData);
 
     // Muestra el mensaje de éxito
