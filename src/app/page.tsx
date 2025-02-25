@@ -21,7 +21,7 @@ export default function Counter(){
           Incrementar numero
         </button>
       </form>
-      <h1 className="flex-4xl font-bold text-gray-800">{counter}</h1>
+      
       <form onSubmit={handleSubmit}>
         <button
           type="submit"
